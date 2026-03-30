@@ -40,7 +40,7 @@ const About = () => {
       className="min-h-screen bg-[#0a0a0a] text-white px-6 md:px-16 lg:px-28 py-24"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {/* Top label */}
         <div className="label mb-8">
           React Performance — {new Date().getFullYear()}

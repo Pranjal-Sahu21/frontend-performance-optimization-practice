@@ -46,7 +46,7 @@ const Home = () => {
               className="inline-block w-4 h-px"
               style={{ background: "rgba(255,255,255,0.25)" }}
             />
-            React Performance — 2025
+            React Performance — {new Date().getFullYear()}
           </div>
 
           {/* Heading */}

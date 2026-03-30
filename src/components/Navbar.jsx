@@ -124,7 +124,7 @@ const Navbar = () => {
             color: "rgba(255,255,255,0.15)",
           }}
         >
-          React Performance — 2025
+          React Performance — {new Date().getFullYear()}
         </div>
       </div>
     </>

@@ -1,13 +1,50 @@
 import "../styles/About.css";
 
-const About = () => {  return (
+// Skills
+const skills = [
+  ["Code Splitting", "using dynamic imports to reduce initial bundle size"],
+  ["Lazy Loading", "components and images to improve load performance"],
+  [
+    "Memoization",
+    "with React.memo, useMemo, and useCallback to prevent unnecessary re-renders",
+  ],
+  [
+    "Efficient State Management",
+    "to avoid excessive updates and prop drilling",
+  ],
+  ["Rendering Optimization", "minimizing DOM updates and reconciliation costs"],
+];
+
+// Vitals
+const vitals = [
+  {
+    abbr: "LCP",
+    full: "Largest Contentful Paint",
+    desc: "How quickly main content becomes visible to the user",
+  },
+  {
+    abbr: "FID",
+    full: "First Input Delay",
+    desc: "Reducing interaction delays for better responsiveness",
+  },
+  {
+    abbr: "CLS",
+    full: "Cumulative Layout Shift",
+    desc: "Ensuring visual stability and preventing layout jumps",
+  },
+];
+
+const About = () => {
+  return (
     <div
       className="min-h-screen bg-[#0a0a0a] text-white px-6 md:px-16 lg:px-28 py-24"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
       <div className="max-w-3xl mx-auto">
         {/* Top label */}
-        <div className="label mb-8">React Performance — 2025</div>
+        <div className="label mb-8">
+          React Performance — {new Date().getFullYear()}
+        </div>
 
         {/* Heading */}
         <h1 className="page-title text-4xl md:text-6xl text-white/90 mb-2">
@@ -37,7 +74,7 @@ const About = () => {  return (
 
         {/* What I'm Practicing */}
         <section>
-          <div className="flex items-center gap-3 mb-1">
+          <div className="flex items-center gap-2 mb-1">
             <div className="ping-dot">
               <span className="ping-outer"></span>
               <span className="ping-inner"></span>
@@ -50,28 +87,7 @@ const About = () => {  return (
           </h2>
 
           <ul className="space-y-5">
-            {[
-              [
-                "Code Splitting",
-                "using dynamic imports to reduce initial bundle size",
-              ],
-              [
-                "Lazy Loading",
-                "components and images to improve load performance",
-              ],
-              [
-                "Memoization",
-                "with React.memo, useMemo, and useCallback to prevent unnecessary re-renders",
-              ],
-              [
-                "Efficient State Management",
-                "to avoid excessive updates and prop drilling",
-              ],
-              [
-                "Rendering Optimization",
-                "minimizing DOM updates and reconciliation costs",
-              ],
-            ].map(([title, desc], i) => (
+            {skills.map(([title, desc], i) => (
               <li key={i} className="skill-item flex gap-4">
                 <span className="side-number">
                   {String(i + 1).padStart(2, "0")}
@@ -101,7 +117,7 @@ const About = () => {  return (
 
         {/* Core Web Vitals */}
         <section>
-          <div className="flex items-center gap-3 mb-1">
+          <div className="flex items-center gap-2 mb-1">
             <div className="ping-dot">
               <span className="ping-outer"></span>
               <span className="ping-inner"></span>
@@ -114,23 +130,7 @@ const About = () => {  return (
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5 rounded-sm overflow-hidden">
-            {[
-              {
-                abbr: "LCP",
-                full: "Largest Contentful Paint",
-                desc: "How quickly main content becomes visible to the user",
-              },
-              {
-                abbr: "FID",
-                full: "First Input Delay",
-                desc: "Reducing interaction delays for better responsiveness",
-              },
-              {
-                abbr: "CLS",
-                full: "Cumulative Layout Shift",
-                desc: "Ensuring visual stability and preventing layout jumps",
-              },
-            ].map(({ abbr, full, desc }) => (
+            {vitals.map(({ abbr, full, desc }) => (
               <div
                 key={abbr}
                 className="bg-[#0f0f0f] p-6 flex flex-col gap-3 group hover:bg-[#141414] transition-colors duration-300"
@@ -172,7 +172,7 @@ const About = () => {  return (
 
         {/* Why it Matters */}
         <section>
-          <div className="flex items-center gap-3 mb-1">
+          <div className="flex items-center gap-2 mb-1">
             <div className="ping-dot">
               <span className="ping-outer"></span>
               <span className="ping-inner"></span>

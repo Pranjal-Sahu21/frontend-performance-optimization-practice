@@ -1,86 +1,133 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import "../styles/Navbar.css";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  const links = [
+    { to: "/", label: "Home" },
+    { to: "/about", label: "About" },
+    { to: "/store", label: "Store" },
+    { to: "/contact", label: "Contact" },
+  ];
 
   return (
-    <nav
-      className="sticky top-0 z-50
-      flex items-center justify-between
-      px-6 md:px-16 lg:px-24 xl:px-32 py-4
-      h-20 bg-[#121313]/20
-      backdrop-blur-2xl
-      shadow-lg text-white"
-    >
-      {/* Logo */}
-      <Link to="/"
-        onClick={() => navigate("/")}
-        className="text-xl tracking-wide cursor-pointer"
+    <>
+      <nav
+        className="nav-root sticky top-0 z-50 flex items-center justify-between
+          px-6 md:px-16 lg:px-28 xl:px-32 h-16
+          bg-[#0a0a0a]/60 backdrop-blur-xl"
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
       >
-        React <span className="italic text-white/70">Optimization</span>
-      </Link>
+        {/* Logo */}
+        <Link to="/" className="nav-logo">
+          React <span>Optimization</span>
+        </Link>
 
-      {/* MENU */}
-      <div
-        className={`absolute md:static top-0 left-0 h-screen md:h-auto
-        bg-[#121313]/90 backdrop-blur-2xl md:bg-transparent
-        flex flex-col md:flex-row items-center justify-center
-        md:justify-start gap-8 text-2xl md:text-sm transition-all duration-300
-        
-        ${open ? "w-full bg-black/95" : "w-0 md:w-auto overflow-hidden"}`}
-      >
-        <Link
-          to="/"
-          onClick={() => {
-            setOpen(false);
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-8">
+          {links.map(({ to, label }) => (
+            <Link
+              key={to}
+              to={to}
+              className={`nav-link ${location.pathname === to ? "active" : ""}`}
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Hamburger / Close — single button, animates between states */}
+        <button
+          onClick={() => setOpen((prev) => !prev)}
+          className="md:hidden p-2 relative"
+          aria-label={open ? "Close menu" : "Open menu"}
+          style={{ width: 32, height: 32 }}
+        >
+          {/* Top line → rotates to first arm of × */}
+          <span
+            style={{
+              display: "block",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              width: 18,
+              height: 1,
+              background: "rgba(255,255,255,0.6)",
+              transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              transform: open
+                ? "translate(-50%, -50%) rotate(45deg)"
+                : "translate(-50%, calc(-50% - 4px)) rotate(0deg)",
+            }}
+          />
+          {/* Bottom line — shorter at rest, equalises + rotates to second arm of × */}
+          <span
+            style={{
+              display: "block",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              height: 1,
+              background: "rgba(255,255,255,0.6)",
+              transition:
+                "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1), margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              width: open ? 18 : 12,
+              marginLeft: open ? 0 : 3,
+              transform: open
+                ? "translate(-50%, -50%) rotate(-45deg)"
+                : "translate(-50%, calc(-50% + 4px)) rotate(0deg)",
+            }}
+          />
+        </button>
+      </nav>
+
+      {/* Mobile Drawer */}
+      <div className={`mobile-drawer ${open ? "open" : "closed"} md:hidden`}>
+        {/* Label */}
+        <div
+          style={{
+            position: "absolute",
+            top: "1.25rem",
+            left: "1.5rem",
+            fontFamily: "DM Sans, sans-serif",
+            fontSize: "10px",
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color: "rgba(255,255,255,0.2)",
           }}
-          className="cursor-pointer hover:text-white/70 transition-colors duration-200"
         >
-          Home
-        </Link>
-        <Link
-          to="/about"
-          onClick={() => {
-            setOpen(false);
+          Navigation
+        </div>
+
+        {links.map(({ to, label }) => (
+          <Link
+            key={to}
+            to={to}
+            onClick={() => setOpen(false)}
+            className={`mobile-nav-link ${location.pathname === to ? "active" : ""}`}
+          >
+            {label}
+          </Link>
+        ))}
+
+        {/* Bottom label */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "1.5rem",
+            fontFamily: "DM Sans, sans-serif",
+            fontSize: "10px",
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color: "rgba(255,255,255,0.15)",
           }}
-          className="cursor-pointer hover:text-white/70 transition-colors duration-200"
         >
-          About
-        </Link>
-        <Link
-          to="/store"
-          onClick={() => {
-            setOpen(false);
-          }}
-          className="cursor-pointer hover:text-white/70 transition-colors duration-200"
-        >
-          Store
-        </Link>
-        <Link
-          to="/contact"
-          onClick={() => setOpen(false)}
-          className="cursor-pointer hover:text-white/70 transition-colors duration-200"
-        >
-          Contact
-        </Link>
+          React Performance — 2025
+        </div>
       </div>
-
-      {/* Mobile Menu Button */}
-      <button
-        onClick={() => setOpen(true)}
-        className={`${open ? "hidden" : "md:hidden p-2 rounded-md"}`}
-      >
-        ☰
-      </button>
-      {/* Close Button */}
-      <button
-        onClick={() => setOpen(false)}
-        className={`${!open ? "hidden" : "md:hidden p-2 z-10"}`}
-      >
-        ✕
-      </button>
-    </nav>
+    </>
   );
 };
 

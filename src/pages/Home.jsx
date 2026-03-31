@@ -1,16 +1,15 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Home.css";
 
 const Home = () => {
+  const [imgLoaded, setImgLoaded] = useState(false);
+
   return (
     <div
       className="relative min-h-dvh flex items-center bg-[#0a0a0a] text-white px-6 md:px-16 lg:px-28 xl:px-32 overflow-hidden -mt-20"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
-      <style>{`
-        
-      `}</style>
-
       {/* Bottom glow */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
@@ -106,17 +105,54 @@ const Home = () => {
 
         {/* RIGHT IMAGE */}
         <div className="relative image-wrapper w-full md:max-w-xs lg:max-w-md">
+          {/* Skeleton — visible until image loads */}
+          {!imgLoaded && (
+            <div
+              className="hero-skeleton"
+              style={{
+                position: "absolute",
+                inset: 0,
+                borderRadius: "2px",
+                zIndex: 2,
+              }}
+            >
+              {/* Corner label */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 12,
+                  left: 14,
+                  fontFamily: "DM Sans, sans-serif",
+                  fontSize: "9px",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.18)",
+                  fontWeight: 400,
+                }}
+              >
+                Loading image…
+              </div>
+            </div>
+          )}
+
           {/* Subtle border frame */}
           <div
             className="absolute -inset-px rounded-sm pointer-events-none z-10"
             style={{ border: "1px solid rgba(255,255,255,0.05)" }}
           />
+
           <img
             loading="lazy"
             src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/users-group.png"
             alt=""
-            className="w-full h-auto"
-            style={{ opacity: 0.8, filter: "brightness(0.95)" }}
+            className="hero-img w-full h-auto"
+            style={{
+              opacity: imgLoaded ? 0.8 : 0,
+              filter: "brightness(0.95)",
+              position: "relative",
+              zIndex: 1,
+            }}
+            onLoad={() => setImgLoaded(true)}
           />
         </div>
       </div>

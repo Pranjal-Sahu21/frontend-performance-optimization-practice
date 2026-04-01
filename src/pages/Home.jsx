@@ -139,9 +139,9 @@ const Home = () => {
           />
 
           <img
-            loading="lazy"
-            src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/users-group.png"
-            alt=""
+            src="https://res.cloudinary.com/dracwvnde/image/upload/v1775056006/users-group_mnczfh.webp"
+            alt="users group"
+            fetchPriority="high"
             className="hero-img absolute inset-0 w-full object-cover md:mt-24"
             style={{
               opacity: imgLoaded ? 0.8 : 0,

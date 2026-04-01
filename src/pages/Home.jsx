@@ -36,7 +36,7 @@ const Home = () => {
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col mt-24 md:flex-row items-center gap-16 w-full">
+      <div className="relative z-10 flex flex-col mt-24 md:flex-row items-center gap-16 md:gap-8 w-full">
         {/* LEFT */}
         <div className="flex-1 max-md:text-center">
           {/* Top label */}
@@ -104,19 +104,16 @@ const Home = () => {
         </div>
 
         {/* RIGHT IMAGE */}
-        <div className="relative image-wrapper w-full md:max-w-xs lg:max-w-md">
-          {/* Skeleton — visible until image loads */}
+        <div
+          className="relative w-full md:max-w-xs lg:max-w-md shrink-0"
+          style={{ aspectRatio: "3 / 4" }}
+        >
+          {/* Skeleton */}
           {!imgLoaded && (
             <div
-              className="hero-skeleton"
-              style={{
-                position: "absolute",
-                inset: 0,
-                borderRadius: "2px",
-                zIndex: 2,
-              }}
+              className="hero-skeleton absolute inset-0 rounded-sm md:mt-24"
+              style={{ zIndex: 2 }}
             >
-              {/* Corner label */}
               <div
                 style={{
                   position: "absolute",
@@ -135,21 +132,21 @@ const Home = () => {
             </div>
           )}
 
-          {/* Subtle border frame */}
+          {/* Border frame */}
           <div
-            className="absolute -inset-px rounded-sm pointer-events-none z-10"
-            style={{ border: "1px solid rgba(255,255,255,0.05)" }}
+            className="absolute -inset-px rounded-sm pointer-events-none"
+            style={{ zIndex: 3 }}
           />
 
           <img
             loading="lazy"
             src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/users-group.png"
             alt=""
-            className="hero-img w-full h-auto"
+            className="hero-img absolute inset-0 w-full object-cover md:mt-24"
             style={{
               opacity: imgLoaded ? 0.8 : 0,
               filter: "brightness(0.95)",
-              position: "relative",
+              transition: "opacity 0.5s ease",
               zIndex: 1,
             }}
             onLoad={() => setImgLoaded(true)}

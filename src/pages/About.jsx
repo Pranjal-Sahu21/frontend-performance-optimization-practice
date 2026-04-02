@@ -47,6 +47,52 @@ const vitals = [
   },
 ];
 
+// image formats
+const imageFormats = [
+  {
+    fmt: "WebP",
+    tag: "Recommended",
+    desc: "25–35% smaller than JPEG/PNG with equivalent quality. Supported by all modern browsers. Best default choice for photos and UI assets.",
+    use: "Photos, thumbnails, hero images",
+  },
+  {
+    fmt: "AVIF",
+    tag: "Best Compression",
+    desc: "Up to 50% smaller than JPEG. Excellent for complex images. Encoding is slower — worth it for static assets served at scale.",
+    use: "High-res images, OG images",
+  },
+  {
+    fmt: "SVG",
+    tag: "Vector",
+    desc: "Resolution-independent and tiny for icons and illustrations. Inline SVGs skip the network entirely and can be styled with CSS.",
+    use: "Icons, logos, illustrations",
+  },
+];
+
+// Optimization techniques
+const techniques = [
+  [
+    "Serve via CDN",
+    "deliver images from edge nodes closest to the user, cutting latency dramatically. Providers like Cloudflare, Fastly, and AWS CloudFront cache assets globally.",
+  ],
+  [
+    "Responsive srcset",
+    "let the browser pick the right resolution for the device. Serve a 400px image on mobile, 800px on tablet — never force a phone to download a 2400px file.",
+  ],
+  [
+    "Explicit width & height",
+    "always set both attributes on <img> so the browser can reserve space before the image loads, eliminating layout shift (CLS = 0).",
+  ],
+  [
+    "Compress before upload",
+    "run images through Squoosh, Sharp, or imagemin before deploying. A 3MB PNG becoming a 120KB WebP is a free performance win with zero quality loss at screen resolution.",
+  ],
+  [
+    "Decode async",
+    'add decoding="async" to off-screen images so the browser doesn\'t block the main thread while decoding the image data.',
+  ],
+];
+
 const About = () => {
   return (
     <div
@@ -85,7 +131,7 @@ const About = () => {
 
         {/* What I'm Practicing */}
         <section>
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-3 mb-1">
             <div className="ping-dot">
               <span className="ping-outer"></span>
               <span className="ping-inner"></span>
@@ -128,7 +174,7 @@ const About = () => {
 
         {/* Core Web Vitals */}
         <section>
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-3 mb-1">
             <div className="ping-dot">
               <span className="ping-outer"></span>
               <span className="ping-inner"></span>
@@ -144,7 +190,7 @@ const About = () => {
             {vitals.map(({ abbr, full, desc }) => (
               <div
                 key={abbr}
-                className="bg-[#0f0f0f] p-6 flex flex-col gap-2 group hover:bg-[#141414] transition-colors duration-300"
+                className="bg-[#0f0f0f] p-6 flex flex-col gap-3 group hover:bg-[#141414] transition-colors duration-300"
               >
                 <div
                   className="text-3xl text-white/15 group-hover:text-white/25 transition-colors duration-300"
@@ -181,6 +227,170 @@ const About = () => {
 
         <div className="divider" />
 
+        {/* Image Asset Optimization */}
+        <section>
+          <div className="flex items-center gap-2 mb-1">
+            <div className="ping-dot">
+              <span className="ping-outer"></span>
+              <span className="ping-inner"></span>
+            </div>
+            <div className="label">Asset Optimization</div>
+          </div>
+
+          <h2 className="section-heading text-xl md:text-2xl text-white/85 mb-8 mt-3">
+            Image <span className="italic text-white/40">Optimization</span>
+          </h2>
+
+          {/* Format cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5 rounded-sm overflow-hidden mb-8">
+            {imageFormats.map(({ fmt, tag, desc, use }) => (
+              <div
+                key={fmt}
+                className="bg-[#0f0f0f] p-6 flex flex-col gap-3 group hover:bg-[#141414] transition-colors duration-300"
+              >
+                <div className="flex items-start justify-between">
+                  <div
+                    className="text-2xl text-white/15 group-hover:text-white/25 transition-colors duration-300"
+                    style={{
+                      fontFamily: "Fraunces, serif",
+                      fontStyle: "italic",
+                      fontWeight: 300,
+                    }}
+                  >
+                    {fmt}
+                  </div>
+                  <span
+                    style={{
+                      fontFamily: "DM Sans, sans-serif",
+                      fontSize: "9px",
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      color: "rgba(255,255,255,0.2)",
+                      fontWeight: 400,
+                      marginTop: "4px",
+                    }}
+                  >
+                    {tag}
+                  </span>
+                </div>
+                <p
+                  className="text-white/45 text-xs leading-relaxed"
+                  style={{ fontWeight: 300 }}
+                >
+                  {desc}
+                </p>
+                <div
+                  className="mt-auto"
+                  style={{
+                    fontFamily: "DM Sans, sans-serif",
+                    fontSize: "9px",
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase",
+                    color: "rgba(255,255,255,0.2)",
+                    fontWeight: 400,
+                  }}
+                >
+                  Use for — {use}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Techniques list */}
+          <ul className="space-y-5 mb-8">
+            {techniques.map(([title, desc], i) => (
+              <li key={i} className="skill-item flex gap-4">
+                <span className="side-number">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <p
+                  className="text-white/50 text-sm leading-relaxed"
+                  style={{ fontWeight: 300 }}
+                >
+                  <span
+                    className="skill-label text-white/80 transition-colors duration-300"
+                    style={{
+                      fontFamily: "Fraunces, serif",
+                      fontStyle: "italic",
+                      fontWeight: 300,
+                    }}
+                  >
+                    {title}
+                  </span>{" "}
+                  — {desc}
+                </p>
+              </li>
+            ))}
+          </ul>
+
+          {/* Code snippet — picture element with fallback */}
+          <div
+            className="w-full rounded-sm overflow-hidden"
+            style={{
+              border: "1px solid rgba(255,255,255,0.06)",
+              background: "rgba(255,255,255,0.02)",
+            }}
+          >
+            <div
+              className="px-4 py-2 flex items-center justify-between"
+              style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+            >
+              <span
+                style={{
+                  fontFamily: "DM Sans, sans-serif",
+                  fontSize: "9px",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.25)",
+                  fontWeight: 400,
+                }}
+              >
+                Modern image pattern
+              </span>
+              <span
+                style={{
+                  fontFamily: "DM Sans, sans-serif",
+                  fontSize: "9px",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.15)",
+                  fontWeight: 400,
+                }}
+              >
+                HTML
+              </span>
+            </div>
+            <pre
+              className="px-5 py-4 text-xs leading-[1.9] overflow-x-auto"
+              style={{
+                fontFamily: "monospace",
+                color: "rgba(255,255,255,0.3)",
+                margin: 0,
+              }}
+            >
+              {`<picture>
+  <!-- AVIF for browsers that support it -->
+  <source srcset="hero.avif" type="image/avif" />
+ 
+  <!-- WebP as the mid-tier fallback -->
+  <source srcset="hero.webp" type="image/webp" />
+ 
+  <!-- JPEG as the universal fallback -->
+  <img
+    src="hero.jpg"
+    alt="Hero image"
+    width="800"
+    height="600"
+    loading="lazy"
+    decoding="async"
+  />
+</picture>`}
+            </pre>
+          </div>
+        </section>
+
+        <div className="divider" />
+
         {/* Preload & Prefetch */}
         <section>
           <div className="flex items-center gap-2 mb-1">
@@ -192,8 +402,7 @@ const About = () => {
           </div>
 
           <h2 className="section-heading text-xl md:text-2xl text-white/85 mb-8 mt-3">
-            Preload & Prefetch{" "}
-            <span className="italic text-white/40">Practice</span>
+            Preload & <span className="italic text-white/40">Prefetch</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5 rounded-sm overflow-hidden mb-8">
@@ -389,7 +598,7 @@ const About = () => {
 
         {/* Why it Matters */}
         <section>
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-3 mb-1">
             <div className="ping-dot">
               <span className="ping-outer"></span>
               <span className="ping-inner"></span>

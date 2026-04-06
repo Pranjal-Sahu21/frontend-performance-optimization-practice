@@ -1,16 +1,125 @@
-# React + Vite
+# 🚀 Frontend Performance Optimization Practice
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📌 Introduction
 
-Currently, two official plugins are available:
+This project is a **React-based frontend application** built with **Vite** that focuses on practicing and demonstrating **frontend performance optimization techniques**, such as lazy loading, code splitting, and learning core web vitals such as LCP. CLS, TTI, and INP.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## ✨ Features
+- ⚡ Fast development with **Vite**
+- 🔀 Client-side routing using **React Router**
+- 🧩 Component-based architecture
+- 🎨 Styling with **Tailwind CSS + custom CSS**
+- 📄 Multiple pages:
+  - Home
+  - About
+  - Store
+  - Contact
+  - Not Found (404)
+- 🚀 Optimized for performance (lazy loading-ready structure)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠 Tech Stack
+- **Frontend Framework:** React 19
+- **Bundler:** Vite
+- **Routing:** React Router DOM
+- **Styling:** Tailwind CSS + CSS files
+- **Linting:** ESLint
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## ⚙️ Installation
+
+### 1. Clone the repository
+```bash
+git clone frontend-performance-optimization-practice
+cd frontend-performance-optimization-practice-main
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+## ▶️ Usage
+
+Start development server
+```bash
+npm run dev
+```
+Build for production
+```bash
+npm run build
+```
+Preview production build
+```bash
+npm run preview
+```
+
+## Project Structure
+
+```bash
+frontend-performance-optimization-practice-main/
+│
+├── public/
+│   └── favicon.svg
+│
+├── src/
+│   ├── components/
+│   │   └── Navbar.jsx
+│   │
+│   ├── pages/
+│   │   ├── Home.jsx
+│   │   ├── About.jsx
+│   │   ├── Store.jsx
+│   │   ├── Contact.jsx
+│   │   └── NotFound.jsx
+│   │
+│   ├── styles/
+│   │   ├── Home.css
+│   │   ├── About.css
+│   │   ├── Store.css
+│   │   ├── Contact.css
+│   │   └── Navbar.css
+│   │
+│   ├── App.jsx
+│   └── main.jsx
+│
+├── index.html
+├── vite.config.js
+├── eslint.config.js
+├── package.json
+└── netlify.toml
+```
+
+## ⚡ Performance Techniques
+
+This project is designed for experimenting with:
+
+ Code Splitting
+ Lazy Loading using React.lazy and Suspense
+ Efficient routing with dynamic imports
+ Optimized asset loading via Vite
+ Component-level optimization
+ Image asset optimization 
+
+
+## 🧪 Examples
+Lazy Loading Example
+
+```bash
+import { lazy, Suspense } from "react";
+
+const About = lazy(() => import("./pages/About"));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <About />
+    </Suspense>
+  );
+}
+```
+

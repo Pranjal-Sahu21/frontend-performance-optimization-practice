@@ -6,6 +6,10 @@ This project is a **React-based frontend application** built with **Vite** that 
 
 ---
 
+![Preview](https://i.postimg.cc/dtKHy3Nh/Screenshot-2026-04-08-232131.png)
+
+---
+
 ## ✨ Features
 
 -  Fast development with **Vite**

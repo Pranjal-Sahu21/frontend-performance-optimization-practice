@@ -1,236 +1,157 @@
-import { useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import "../styles/Store.css";
 
-// Products
-const products = [
-  {
-    id: 1,
-    name: "Velocity Runner",
-    category: "Footwear",
-    price: "$128",
-    tag: "New",
-    img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80",
-  },
-  {
-    id: 2,
-    name: "Minimal Tote",
-    category: "Bags",
-    price: "$74",
-    tag: null,
-    img: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80",
-  },
-  {
-    id: 3,
-    name: "Arc Jacket",
-    category: "Outerwear",
-    price: "$210",
-    tag: "Limited",
-    img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80",
-  },
-  {
-    id: 4,
-    name: "Studio Watch",
-    category: "Accessories",
-    price: "$340",
-    tag: null,
-    img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80",
-  },
-  {
-    id: 5,
-    name: "Form Hoodie",
-    category: "Apparel",
-    price: "$96",
-    tag: "New",
-    img: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600&q=80",
-  },
-  {
-    id: 6,
-    name: "Drift Sneaker",
-    category: "Footwear",
-    price: "$152",
-    tag: null,
-    img: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=600&q=80",
-  },
-  {
-    id: 7,
-    name: "Onyx Sunglasses",
-    category: "Accessories",
-    price: "$88",
-    tag: "Limited",
-    img: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&q=80",
-  },
-  {
-    id: 8,
-    name: "Linen Overshirt",
-    category: "Apparel",
-    price: "$112",
-    tag: null,
-    img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&q=80",
-  },
-];
+const PAGE_SIZE = 40;
 
-const categories = [
-  "All",
-  "Footwear",
-  "Apparel",
-  "Accessories",
-  "Bags",
-  "Outerwear",
-];
+const images = Array.from({ length: 500 }, (_, i) => ({
+  id: i + 1,
+  src: `https://picsum.photos/seed/${i + 1}/600/600`,
+}));
 
-const Store = () => {
-  const [activeCategory, setActiveCategory] = useState("All");
+// Lazy Image Component
+const LazyImage = ({ src }) => {
+  const wrapRef = useRef(null);
+  const [loaded, setLoaded] = useState(false);
+  const [visible, setVisible] = useState(false);
 
-  const filtered =
-    activeCategory === "All"
-      ? products
-      : products.filter((p) => p.category === activeCategory);
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div
-      className="min-h-screen -mt-20 bg-[#0a0a0a] text-white px-6 md:px-16 lg:px-28 py-24"
-      style={{ fontFamily: "'DM Sans', sans-serif" }}
+      ref={wrapRef}
+      className="product-img-wrap"
+      style={{ position: "relative" }}
     >
+      {!loaded && <div className="img-skeleton" />}
+      {visible && (
+        <img
+          src={src}
+          alt=""
+          onLoad={() => setLoaded(true)}
+          style={{
+            position: "relative",
+            zIndex: 1,
+            opacity: loaded ? 1 : 0,
+            transition: "opacity 0.4s ease",
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+// Store component
+const Store = () => {
+  const [page, setPage] = useState(1);
+
+  const totalPages = Math.ceil(images.length / PAGE_SIZE);
+
+  const currentImages = images.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
+
+  return (
+    <div className="min-h-screen -mt-20 bg-[#0a0a0a] text-white px-6 md:px-16 lg:px-28 py-24">
       <div className="max-w-5xl mx-auto">
-        {/* Top label */}
+        {/* Header */}
         <div className="label mb-8">
           Collection — {new Date().getFullYear()}
         </div>
 
-        {/* Heading */}
-        <h1
-          style={{
-            fontFamily: "Fraunces, serif",
-            fontWeight: 300,
-            lineHeight: 1.1,
-          }}
-          className="text-4xl md:text-6xl text-white/90 mb-2"
-        >
+        {/* Titles */}
+        <h1 className="page-title text-4xl md:text-6xl text-white/90 mb-2">
           The
         </h1>
-        <h1
-          style={{
-            fontFamily: "Fraunces, serif",
-            fontWeight: 300,
-            fontStyle: "italic",
-            lineHeight: 1.1,
-          }}
-          className="text-4xl md:text-6xl text-white/40 mb-10"
-        >
+        <h1 className="page-title text-4xl md:text-6xl text-white/40 mb-10 italic">
           Store
         </h1>
 
         {/* Intro */}
         <p
-          className="text-white/55 text-sm leading-[1.85] max-w-sm"
-          style={{ fontWeight: 300 }}
+          className="text-white/50 leading-[1.85] text-sm md:text-[0.95rem] max-w-xl mb-12"
+          style={{ fontWeight: 300, fontFamily: "'DM Sans', sans-serif" }}
         >
-          A curated selection of products — each image below is{" "}
+          Over 500 high-quality images, loaded using pagination, lazy loading
+          and intersection observers for{" "}
           <span
-            style={{
-              fontFamily: "Fraunces, serif",
-              fontStyle: "italic",
-              color: "rgba(255,255,255,0.75)",
-            }}
+            className="text-white/80"
+            style={{ fontFamily: "Fraunces, serif", fontStyle: "italic" }}
           >
-            lazy loaded
+            optimal performance
           </span>{" "}
-          to demonstrate optimized load performance.
+          and user experience.
+        </p>
+
+        {/* Info */}
+        <p className="label text-white/55 text-sm max-w-sm -mb-16">
+          Page {page} of {totalPages}
         </p>
 
         <div className="divider" />
 
-        {/* Filter row */}
-        <div className="flex items-center justify-between mb-10">
-          <div className="flex items-center gap-1 flex-wrap">
-            {categories.map((cat) => {
-              const isActive = activeCategory === cat;
-              return (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className="label transition-all duration-200"
-                  style={{
-                    background: isActive ? "rgba(255,255,255,0.08)" : "none",
-                    border: isActive
-                      ? "1px solid rgba(255,255,255,0.12)"
-                      : "1px solid transparent",
-                    borderRadius: "3px",
-                    cursor: "pointer",
-                    color: isActive
-                      ? "rgba(255,255,255,0.85)"
-                      : "rgba(255,255,255,0.35)",
-                    padding: "5px 10px",
-                  }}
-                >
-                  {cat}
-                </button>
-              );
-            })}
-          </div>
-          <div
-            className="label hidden sm:block"
-            style={{ color: "rgba(255,255,255,0.35)" }}
-          >
-            {filtered.length} {filtered.length === 1 ? "item" : "items"}
-          </div>
+        {/* Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          {currentImages.map((image) => (
+            <LazyImage key={image.id} src={image.src} />
+          ))}
         </div>
 
-        {/* Product grid or empty state */}
-        {filtered.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10">
-            {filtered.map((product) => (
-              <div key={product.id} className="product-card">
-                <div className="product-img-wrap">
-                  <div className="img-skeleton" />
-                  <img
-                    loading="lazy"
-                    src={product.img}
-                    alt={product.name}
-                    onLoad={(e) => {
-                      e.target.setAttribute("data-loaded", "true");
-                      const skeleton = e.target.previousSibling;
-                      if (skeleton) skeleton.style.display = "none";
-                    }}
-                    style={{ position: "relative", zIndex: 1 }}
-                  />
-                  {product.tag && (
-                    <span className="product-tag">{product.tag}</span>
-                  )}
-                </div>
-                <div className="product-info">
-                  <div className="product-meta">
-                    <span className="product-name">{product.name}</span>
-                    <span className="product-price">{product.price}</span>
-                  </div>
-                  <span className="product-category">{product.category}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="py-24 flex flex-col items-center gap-3">
-            <p
-              style={{
-                fontFamily: "Fraunces, serif",
-                fontWeight: 300,
-                fontStyle: "italic",
-                color: "rgba(255,255,255,0.25)",
-                fontSize: "1.5rem",
-              }}
-            >
-              Nothing here yet.
-            </p>
-            <p className="label" style={{ color: "rgba(255,255,255,0.2)" }}>
-              No products in this category
-            </p>
-          </div>
-        )}
-
+        {/* Pagination Controls */}
         <div className="divider" />
 
-        {/* Footer label */}
-        <div className="label text-right">End of Collection</div>
+        <div className="flex items-center justify-between mt-10">
+          {/* Left: Prev */}
+          <button
+            onClick={() => setPage((p) => p - 1)}
+            disabled={page === 1}
+            className="label"
+            style={{
+              opacity: page === 1 ? 0.5 : 0.8,
+              cursor: page === 1 ? "not-allowed" : "pointer",
+              transition: "opacity 0.3s ease",
+            }}
+          >
+            ← Previous
+          </button>
+
+          {/* Center: Page indicator */}
+          <div className="label" style={{ letterSpacing: "0.25em" }}>
+            {String(page).padStart(2, "0")} /{" "}
+            {String(totalPages).padStart(2, "0")}
+          </div>
+
+          {/* Right: Next */}
+          <button
+            onClick={() => setPage((p) => p + 1)}
+            disabled={page === totalPages}
+            className="label"
+            style={{
+              opacity: page === totalPages ? 0.5 : 0.8,
+              cursor: page === totalPages ? "not-allowed" : "pointer",
+              transition: "opacity 0.3s ease",
+            }}
+          >
+            Next →
+          </button>
+        </div>
+
+        <div className="divider" />
       </div>
     </div>
   );

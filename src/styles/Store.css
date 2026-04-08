@@ -1,11 +1,3 @@
-.label {
-  font-family: "DM Sans", sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
-  font-weight: 400;
-}
 
 .divider {
   width: 100%;
@@ -122,4 +114,9 @@
 .product-img-wrap img.loaded + .img-skeleton,
 .product-img-wrap img[data-loaded="true"] ~ .img-skeleton {
   display: none;
+}
+
+.label button:hover,
+button.label:hover {
+  opacity: 1 !important;
 }
